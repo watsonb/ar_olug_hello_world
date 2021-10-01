@@ -1,2 +1,7 @@
 ---
 # handlers file for ar_hello_world
+
+- name: hello_world role handler
+  debug:
+    msg: Hey, I'm the hello world handler
+  listen: hello_handler

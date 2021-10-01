@@ -3,10 +3,11 @@
 - name: SHELL | echo role's message on host
   shell: 'echo "{{ hello_world_msg | default("Hello, World!") }}"'
   register: hello_world_linux_out
-  changed_when: false
+  changed_when: hello_world_changed | default(false) | bool
+  notify: hello_handler
   tags: [ skip_ansible_lint ]
 
 - name: DEBUG | debug host shell standard output
   debug:
     var: hello_world_linux_out.stdout
-    verbosity: 1
+    verbosity: "{{ hello_world_verbosity }}"

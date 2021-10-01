@@ -15,7 +15,7 @@ Run with verbose output (i.e., `-v`) to debug the host's standard output.
 
 ## Current Version
 
-![Version](https://img.shields.io/badge/version-v1.0.1-blue.svg)
+![Version](https://img.shields.io/badge/version-v1.1.0-blue.svg)
 
 See [VERSION](./VERSION.md) for notes/history.
 

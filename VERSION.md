@@ -4,11 +4,8 @@ See [Semantic Versioning](http://semver.org/spec/v2.0.0.html)
 
 |Version|Date      |Notes|
 |:-----:|:--------:|:----|
-|1.0.1  |2021-01-29|Lint|
-|1.0.0  |2021-01-28|Adding ansible-mdgen documentation|
-|0.3.0  |2018-09-25|Added Windows support|
-|0.2.0  |2018-08-03|Added molecule testing.|
-|0.1.0  |2018-05-22|Initial Release|
+|1.1.0  |2021-10-01|Verbosity is a variable, handler|
+|1.0.0  |2021-10-01|Initial Release|
 
 ## Version Highlights
 
