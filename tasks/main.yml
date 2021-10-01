@@ -1,0 +1,5 @@
+---
+# tasks file for ar_hello_world
+
+- name: include the tasks file for ansible_system
+  include_tasks: "hello_{{ ansible_system }}.yml"

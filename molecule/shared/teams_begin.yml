@@ -1,0 +1,35 @@
+---
+
+- name: SET_FACT | lookup the DO_TEAMS_NOTIFY environment variable
+  set_fact:
+    env_teams: "{{ lookup('env', 'DO_TEAMS_NOTIFY') }}"
+
+- debug:
+    var: env_teams
+    verbosity: 1
+
+- name: SET_FACT | set the local teams notify variable if DO_TEAMS_NOTIFY variable was set to something
+  set_fact:
+    doTeamsNotify: true
+  when:
+    - env_teams is defined
+    - (env_teams | trim != '')
+
+- name: SET_FACT | lookup the TEAMS_ANSIBLE_WEBHOOK_URL environment variable
+  set_fact:
+    teams_webhook_url: "{{ lookup('env', 'TEAMS_ANSIBLE_WEBHOOK_URL') }}"
+
+- name: OFFICE_365_CONNECTOR_CARD | Send notification message via Teams
+  become: false
+  office_365_connector_card:
+    webhook: "{{ teams_webhook_url }}"
+    text: 'Testing application of Ansible role on {{ inventory_hostname }}...'
+    title: 'Ansible Role Test {{ inventory_hostname }} Starting'
+    color: '#0000ff'
+  delegate_to: localhost
+  ignore_errors: true
+  changed_when: false
+  when:
+    - (doTeamsNotify is defined) and (doTeamsNotify | bool)
+    - teams_webhook_url is defined
+    - (teams_webhook_url | trim != '')

@@ -1,0 +1,5 @@
+---
+# defaults file for ar_hello_world
+
+# @var: hello_world_msg: The message to echo on a host
+hello_world_msg: 'Hello, World!'

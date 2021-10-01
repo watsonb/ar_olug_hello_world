@@ -1,0 +1,155 @@
+---
+
+prerun: false
+
+#++++++++++++++++++++++++++++
+# ANSIBLE SECTION
+# You probably don't need to adjust this
+#++++++++++++++++++++++++++++
+ansible:
+  host_key_checking: false
+  raw_env_vars:
+    ANSIBLE_FORCE_COLOR: true
+  env:
+    ANSIBLE_ROLES_PATH: ../resources/roles
+    ANSIBLE_COLLECTIONS_PATHS: $PWD/molecule/resources/collections
+    ANSIBLE_SSH_RETRIES: '5'
+    ANSIBLE_CALLBACK_WHITELIST: "junit"
+    # ANSIBLE_CALLBACK_PLUGINS: $PWD/molecule/resources/callback_plugins
+    JUNIT_OUTPUT_DIR: $PWD/molecule/reports
+    JUNIT_INCLUDE_SETUP_TASKS_IN_REPORT: false
+  ansiblecfg_defaults:
+    retry_files_enabled: false
+    callback_whitelist: junit
+    collections_paths: $PWD/molecule/resources/collections
+
+
+#++++++++++++++++++++++++++++
+# DEPENDENCY SECTION
+# 1. Use galaxy for the standard molecule way
+# 2. Use the shell/pymgit method for custom molecule delegated drivers (full VMs)
+# NOTICE: if requirements are scenario-dependent, then needs to be defined
+# in molecule.yml in each scenario
+#++++++++++++++++++++++++++++
+
+# 1. Galaxy
+# dependency:
+#   name: galaxy
+#   enabled: True
+#   options:
+#     ignore-errors: true
+#     ignore-certs: true
+#     roles-path: $PWD/molecule/resources/roles
+#     role-file: $PWD/molecule/default/requirements.yml
+
+# 2. Pymgit
+# Notice here that we've wrapped pymgit in a shell script so we can install
+# collection dependencies as well
+dependency:
+  name: shell
+  enabled: True
+  command: molecule/shared/dependency.sh
+
+
+#++++++++++++++++++++++++++++
+# DRIVER SECTION
+# 1. Use docker if you can
+# 2. Use the custom delegated/pymgit method (full VMs)
+#++++++++++++++++++++++++++++
+
+# 1. Docker
+# driver:
+#   name: docker
+
+# 2. Custom delegated
+driver:
+  name: delegated
+  options:
+    managed: true
+    login_cmd_template: 'ssh {instance} -F {{ molecule_ephemeral_directory }}/ssh_config'
+    ansible_connection_options:
+      connection: ssh
+      ansible_ssh_common_args: '-F {{ molecule_ephemeral_directory }}/ssh_config'
+
+
+#++++++++++++++++++++++++++++
+# YAML LINT SECTION
+# You probably don't need to adjust this
+#++++++++++++++++++++++++++++
+# TODO: add ansible-lint command when it works with roles and collections
+lint: |
+  set -e
+  yamllint .
+  ansible-lint --offline
+
+
+#++++++++++++++++++++++++++++
+# PLATFORMS SECTION
+# change *role_template* and *-role-template-* to corresponde with your role name
+# 1. Use docker if you can.  May need to specify other images for special cases
+# 2. Use the custom delegated/pymgit method (full VMs)
+#++++++++++++++++++++++++++++
+# platforms must be defined in molecule.yml in each scenario
+
+
+#++++++++++++++++++++++++++++
+# PROVISIONER SECTION
+# You'll need to define any role vars here that you want to specifically test
+# in your scenario
+#++++++++++++++++++++++++++++
+# the provisionor sections is likecly scenario-dependent and therefore should be
+# defined in molecule.yml in each scenario.  If not, it could be defined here
+provisioner:
+  name: ansible
+  inventory:
+    group_vars:
+      vmware:
+        foo: bar
+  playbooks:
+    prepare: ../shared/prepare.yml
+    verify: ../shared/verify.yml
+    converge: ../shared/converge.yml
+    playbook: ../shared/playbook.yml
+    cleanup: ../shared/cleanup.yml
+    delegated:
+      create: ../resources/playbooks/create.yml
+      destroy: ../resources/playbooks/destroy.yml
+  env:
+    ANSIBLE_ROLES_PATH: ../resources/roles
+    ANSIBLE_COLLECTIONS_PATHS: ../resources/collections
+    ANSIBLE_SSH_RETRIES: '5'
+    ANSIBLE_CALLBACK_WHITELIST: "junit"
+    # ANSIBLE_CALLBACK_PLUGINS: $PWD/molecule/resources/callback_plugins
+    JUNIT_OUTPUT_DIR: $PWD/molecule/reports
+    JUNIT_INCLUDE_SETUP_TASKS_IN_REPORT: false
+    # ARA_API_CLIENT: http  # define in pipline instead
+    # ARA_API_SERVER: http://knebawils006.kiewittest.com  # define in pipline instead
+    # ARA_API_TIMEOUT: 15  # define in pipline instead
+    ARA_DEFAULT_LABELS: molecule,${USER-ansible},$PWD
+
+
+#++++++++++++++++++++++++++++
+# SCENARIO SECTION
+# You probably don't need to adjust this (unless you're created another scenario)
+#++++++++++++++++++++++++++++
+# since scenario name is in this section, needs to be in molecule.yml
+
+
+#++++++++++++++++++++++++++++
+# VERIFIER SECTION
+# You probably don't need to adjust this (unless you're created another scenario)
+#++++++++++++++++++++++++++++
+verifier:
+# 1. Ansible verify
+  name: ansible
+  enabled: true
+
+# 2. Testinfra
+# name: testinfra
+# directory: tests/
+# options:
+#   junitxml: ../reports/junit-default-out.xml
+#   vv: true  # more verbose output
+#   # s: true  # see lots of output
+# lint:
+#   name: flake8

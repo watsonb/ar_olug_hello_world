@@ -1,0 +1,9 @@
+---
+- name: Converge
+  hosts: all
+  gather_facts: true
+  tasks:
+
+    - name: IMPORT_ROLE | apply the ar_olug_hello_world role
+      import_role:
+        name: ar_olug_hello_world

@@ -1,0 +1,32 @@
+---
+
+# base shared roles
+
+- src: ssh://KiewitCorp@vs-ssh.visualstudio.com:22/DefaultCollection/Ansible/_ssh/ae_molecule
+  version: master
+  dest: molecule/resources
+  name: inventory
+  tags: []
+
+- src: ssh://KiewitCorp@vs-ssh.visualstudio.com:22/DefaultCollection/Ansible/_ssh/ap_molecule
+  version: master
+  dest: molecule/resources
+  name: playbooks
+  tags: []
+
+- src: https://github.com/jtyr/ansible-config_encoder_filters.git
+  version: master
+  dest: molecule/resources/roles
+  tags: []
+
+- src: ssh://KiewitCorp@vs-ssh.visualstudio.com:22/DefaultCollection/Ansible/_ssh/ar_vmware_instance
+  version: master
+  dest: molecule/resources/roles
+  tags: []
+
+- src: ssh://KiewitCorp@vs-ssh.visualstudio.com:22/DefaultCollection/Ansible/_ssh/ar_azure_instance
+  version: master
+  dest: molecule/resources/roles
+  tags: []
+
+# roles specificyally needed by this scenario

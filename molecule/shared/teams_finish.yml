@@ -1,0 +1,16 @@
+---
+
+- name: OFFICE_365_CONNECTOR_CARD | Send notification message via Teams
+  become: false
+  office_365_connector_card:
+    webhook: "{{ teams_webhook_url }}"
+    text: 'Completed application of Ansible role on {{ inventory_hostname }}...'
+    title: 'Ansible Role Test {{ inventory_hostname }} Finished'
+    color: '#00ff00'
+  ignore_errors: true
+  changed_when: false
+  delegate_to: localhost
+  when:
+    - (doTeamsNotify is defined) and (doTeamsNotify | bool)
+    - teams_webhook_url is defined
+    - (teams_webhook_url | trim != '')

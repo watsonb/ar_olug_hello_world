@@ -1,0 +1,4 @@
+ansible-mdgen
+mkdocs-mermaid2-plugin
+mkdocs-with-pdf
+mkdocs-material

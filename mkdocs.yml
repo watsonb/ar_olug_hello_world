@@ -1,0 +1,28 @@
+---
+site_name: ar_hello_world
+theme: material
+# theme: readthedocs
+plugins:
+  - search
+  - mermaid2
+  - with-pdf:
+      author: Benjamin Watson
+      copyright: Kiewit
+      cover_subtitle: Ansible role to echo "Hello World" on hosts
+      toc_level: 2
+nav:
+  - index.md
+  - Defaults:
+      - defaults/main.md
+  - Vars:
+      - variables/main.md
+  - Tasks:
+      - tasks/flow.md
+      - tasks/main.md
+      - tasks/hello_Linux.md
+      - tasks/hello_Win32NT.md
+  - Templates:
+      - roletemplates/sample.j2.md
+  - Handlers:
+      - handlers/main.md
+  # - appendix.md

@@ -1,0 +1,19 @@
+---
+galaxy_info:
+  author: Ben Watson
+  description: A little Hello World role to test ansible-galaxy installation support
+  company: Kiewit
+  issue_tracker_url: "https://taiga.kiewitplaza.com/project/benjaminwatson-devops-team-project/issues"
+  license: TBD
+  min_ansible_version: 2.0
+  platforms:
+    - name: EL (CentOS)
+      versions:
+        - 7
+    - name: Ubuntu (Debian)
+      versions:
+        - xenial (16.04)
+    - name: Ubuntu (Debian)
+      versions:
+        - bionic (18.04)
+dependencies: []

@@ -1,0 +1,12 @@
+---
+
+- name: WIN_SHELL | echo role's message on host
+  win_shell: 'echo "{{ hello_world_msg | default("Hello, (Windows) World!") }}"'
+  register: hello_world_windows_out
+  changed_when: false
+  tags: [ skip_ansible_lint ]
+
+- name: DEBUG | debug host shell standard output
+  debug:
+    var: hello_world_windows_out.stdout
+    verbosity: 1

@@ -1,0 +1,11 @@
+---
+
+- name: Verify
+  hosts: all
+  gather_facts: true
+  tasks:
+
+    - name: Assert that always passes
+      assert:
+        that:
+          - 1 == 1
