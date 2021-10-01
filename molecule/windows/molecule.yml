@@ -1,0 +1,189 @@
+---
+#++++++++++++++++++++++++++++
+# ANSIBLE SECTION
+# You probably don't need to adjust this
+#++++++++++++++++++++++++++++
+# see base_config
+
+
+#++++++++++++++++++++++++++++
+# DEPENDENCY SECTION
+# 1. Use galaxy for the standard molecule way
+# 2. Use the shell/pymgit method for custom molecule delegated drivers (full VMs)
+#++++++++++++++++++++++++++++
+# see base_config
+
+
+#++++++++++++++++++++++++++++
+# DRIVER SECTION
+# 1. Use docker if you can
+# 2. Use the custom delegated/pymgit method (full VMs)
+#++++++++++++++++++++++++++++
+
+# driver:
+#   name: vagrant
+#   provider:
+#     name: virtualbox
+
+#++++++++++++++++++++++++++++
+# YAML LINT SECTION
+# You probably don't need to adjust this
+#++++++++++++++++++++++++++++
+# see base_config
+
+
+#++++++++++++++++++++++++++++
+# PLATFORMS SECTION
+# change *role_template* and *-role-template-* to corresponde with your role name
+# 1. Use docker if you can.  May need to specify other images for special cases
+# 2. Use the custom delegated/pymgit method (full VMs)
+#++++++++++++++++++++++++++++
+# platforms:
+#   - name: win2016-ar-jenkins-slave-$BRANCH_NAME
+#     box: windows_2016_docker_virtualbox
+#     box_url: "http://repository.kiewit.com/vagrant/boxes/windows_2016_docker_virtualbox.box"
+#     memory: 2048
+#     cpus: 2
+#     instance_raw_config_args:
+#       - "vm.network 'forwarded_port', guest: 5985, host: 55985"
+#       - "vm.network 'forwarded_port', guest: 5986, host: 55986"
+#       - "vm.boot_timeout = 600"
+#       - "winrm.max_tries = 40"
+#       - "winrm.username = 'vagrant'"
+#       - "winrm.password = 'vagrant'"
+#     interfaces:
+#       - auto_config: true
+#         network_name: private_network
+#         type: dhcp
+#     config_options:
+#       synced_folder: false
+#     provider_options:
+#       gui: false
+#       linked_clone: true
+#     provider_raw_config_args:
+#       - "customize ['modifyvm', :id, '--cpuexecutioncap', '80']"
+#     provision: true
+#     groups:
+#       - windows
+#       - hello_world
+
+platforms:
+  - name: knemol-ar-hello-world-windows-$BRANCH_NAME.kiewittest.com
+    image: windows-server-2016-datacenter
+    vmware_instance_cloudinit: false
+    vmware_instance_disk_size: 60
+    vmware_instance_memory: '8192'
+    vmware_instance_cpus: '4'
+    groups:
+      - vmware
+      - windows
+      - hello_world
+
+
+#++++++++++++++++++++++++++++
+# PROVISIONER SECTION
+# You'll need to define any role vars here that you want to specifically test
+# in your scenario
+#++++++++++++++++++++++++++++
+# provisioner:
+#   name: ansible
+#   connection_options:
+#     ansible_become: false
+#     ansible_user: vagrant
+#     ansible_password: vagrant
+#     ansible_port: 55986
+#     ansible_host: 127.0.0.1
+#     ansible_connection: winrm
+#     ansible_winrm_transport: basic
+#     ansible_winrm_server_cert_validation: ignore
+#   inventory:
+#     group_vars:
+#       hello_world:
+#         hello_world_msg: 'Hello, (Windows) World!'
+#       windows:
+#         ansible_become: false
+#         ansible_user: vagrant
+#         ansible_password: vagrant
+#         ansible_port: 55986
+#         ansible_host: 127.0.0.1
+#         ansible_connection: winrm
+#         ansible_winrm_transport: basic
+#         ansible_winrm_server_cert_validation: ignore
+#   playbooks:  # Create/destroy playbooks for various molecule drivers
+#     azure:  # Custom azure driver
+#       create: ../resources/playbooks/azure/create.yml
+#       destroy: ../resources/playbooks/azure/destroy.yml
+#     delegated:  # Custom delegated driver (for VMWare)
+#       create: ../resources/playbooks/delegated/create.yml
+#       destroy: ../resources/playbooks/delegated/destroy.yml
+#   lint:
+#     name: ansible-lint
+#     enable: true
+#     options:
+#       exclude:
+#         - 'molecule/default/roles/ar_hello_world'
+#         - 'molecule/windows/roles/ar_hello_world'
+#         - '../ar_hello_world'
+
+provisioner:
+  name: ansible
+  connection_options:
+    ansible_connection: winrm
+    ansible_port: 5986
+    ansible_winrm_transport: basic
+    ansible_winrm_server_cert_validation: ignore
+  inventory:
+    group_vars:
+      hello_world:
+        hello_world_msg: 'Hello, (Windows) World!'
+      windows:
+        foo: bar
+        ansible_become: false
+        ansible_user: ansible
+        ansible_password: $ANSIBLE_PW
+        ansible_port: 5986
+        ansible_winrm_transport: basic
+        ansible_winrm_server_cert_validation: ignore
+
+
+#++++++++++++++++++++++++++++
+# SCENARIO SECTION
+# You probably don't need to adjust this (unless you're created another scenario)
+#++++++++++++++++++++++++++++
+scenario:
+  name: windows
+  create_sequence:
+    - create
+    - prepare
+  check_sequence:
+    - destroy
+    - create
+    - prepare
+    - converge
+    - check
+    - destroy
+  converge_sequence:
+    - create
+    - prepare
+    - converge
+  destroy_sequence:
+    - destroy
+  test_sequence:
+    - lint
+    - destroy
+    - dependency
+    - syntax
+    - create
+    - prepare
+    - converge
+    - idempotence
+    - side_effect
+    - verify
+    - destroy
+
+
+#++++++++++++++++++++++++++++
+# VERIFIER SECTION
+# You probably don't need to adjust this (unless you're created another scenario)
+#++++++++++++++++++++++++++++
+# see base_config

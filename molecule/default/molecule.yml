@@ -1,0 +1,109 @@
+---
+#++++++++++++++++++++++++++++
+# ANSIBLE SECTION
+# You probably don't need to adjust this
+#++++++++++++++++++++++++++++
+# see base_config
+
+
+#++++++++++++++++++++++++++++
+# DEPENDENCY SECTION
+# 1. Use galaxy for the standard molecule way
+# 2. Use the shell/pymgit method for custom molecule delegated drivers (full VMs)
+#++++++++++++++++++++++++++++
+# see base_config
+
+
+#++++++++++++++++++++++++++++
+# DRIVER SECTION
+# 1. Use docker if you can
+# 2. Use the custom delegated/pymgit method (full VMs)
+#++++++++++++++++++++++++++++
+# overwrite driver in base-config
+driver:
+  name: docker
+
+
+#++++++++++++++++++++++++++++
+# YAML LINT SECTION
+# You probably don't need to adjust this
+#++++++++++++++++++++++++++++
+# see base_config
+
+
+#++++++++++++++++++++++++++++
+# PLATFORMS SECTION
+# change *role_template* and *-role-template-* to corresponde with your role name
+# 1. Use docker if you can.  May need to specify other images for special cases
+# 2. Use the custom delegated/pymgit method (full VMs)
+#++++++++++++++++++++++++++++
+platforms:
+  - name: ubuntu1804-$BRANCH_NAME
+    image: "solita/ubuntu-systemd:bionic"
+    groups:
+      - ubuntu
+      - hello_world
+  - name: ubuntu1604-$BRANCH_NAME
+    image: "solita/ubuntu-systemd:xenial"
+    groups:
+      - ubuntu
+      - hello_world
+  - name: centos-systemd-$BRANCH_NAME
+    image: "solita/centos-systemd:7"
+    groups:
+      - ubuntu
+      - hello_world
+
+#++++++++++++++++++++++++++++
+# PROVISIONER SECTION
+# You'll need to define any role vars here that you want to specifically test
+# in your scenario
+#++++++++++++++++++++++++++++
+provisioner:
+  name: ansible
+  inventory:
+    group_vars:
+      hello_world:
+        hello_world_msg: 'Hello, (Linux) World!'
+
+#++++++++++++++++++++++++++++
+# SCENARIO SECTION
+# You probably don't need to adjust this (unless you're created another scenario)
+#++++++++++++++++++++++++++++
+scenario:
+  name: default
+  create_sequence:
+    - create
+    - prepare
+  check_sequence:
+    - destroy
+    - create
+    - prepare
+    - converge
+    - check
+    - destroy
+  converge_sequence:
+    - create
+    - prepare
+    - converge
+  destroy_sequence:
+    - destroy
+  test_sequence:
+    - lint
+    - dependency
+    - destroy
+    - syntax
+    - create
+    - prepare
+    - converge
+    - idempotence
+    - side_effect
+    - verify
+    - destroy
+
+
+#++++++++++++++++++++++++++++
+# VERIFIER SECTION
+# You probably don't need to adjust this (unless you're created another scenario)
+#++++++++++++++++++++++++++++
+# see base_config

@@ -1,0 +1,9 @@
+reports/*
+!reports/.gitkeep
+resources/*
+!resources/.gitkeep
+!resources/roles/.gitkeep
+!resources/collections/.gitkeep
+!resources/callback_plugins/
+!resources/callback_plugins/junit.py
+ephemeral

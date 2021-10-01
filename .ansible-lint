@@ -1,0 +1,17 @@
+---
+
+exclude_paths:
+  - molecule
+
+parseable: true
+
+quiet: false
+
+skip_list:
+  - skip_ansible_lint
+  - '306'
+  - 'role-name'
+
+use_default_rules: true
+
+verbosity: 0
