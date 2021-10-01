@@ -15,7 +15,7 @@ Run with verbose output (i.e., `-v`) to debug the host's standard output.
 
 ## Current Version
 
-![Version](https://img.shields.io/badge/version-v1.1.0-blue.svg)
+![Version](https://img.shields.io/badge/version-v1.1.1-blue.svg)
 
 See [VERSION](./VERSION.md) for notes/history.
 
@@ -34,7 +34,9 @@ The variables in this role include:
 
 |Name|Required|Default|Choices|Comments|
 |:---|:------:|:------|:------|:-------|
-|hello_world_msg|no|'Hello, World!'| |The message to echo on a host|
+|hello_world_msg|yes|'Hello, World!'| |The message to echo on a host|
+|hello_world_verbosity|yes|1|1,2,3,4,5|The verbosity level of debug messages|
+|hello_world_changed|no|false|true,false|Whether the shell commands are "changed" and fire handler(s).|
 
 ## Dependencies
 

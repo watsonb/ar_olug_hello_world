@@ -4,3 +4,8 @@
 # @var: hello_world_msg: The message to echo on a host
 hello_world_msg: 'Hello, World!'
 hello_world_verbosity: 1
+
+# I could explicitly define this as false here, but I already default it to
+# false in the tasks that use this variable, hence I can comment it out and say
+# that it is not really required
+# hello_world_changed: false

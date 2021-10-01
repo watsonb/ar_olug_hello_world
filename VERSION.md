@@ -4,6 +4,7 @@ See [Semantic Versioning](http://semver.org/spec/v2.0.0.html)
 
 |Version|Date      |Notes|
 |:-----:|:--------:|:----|
+|1.1.1  |2021-10-01|doc update|
 |1.1.0  |2021-10-01|Verbosity is a variable, handler|
 |1.0.0  |2021-10-01|Initial Release|
 
